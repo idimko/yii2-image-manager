@@ -65,8 +65,21 @@ class ImageManagerInputWidget extends InputWidget {
             $sFieldNameId = $sFieldId . "_name";
             //get attribute name
             $sFieldAttributeName = Html::getAttributeName($this->attribute);
-            //get filename from selected file
+
             $ImageManager_id = $this->model->{$sFieldAttributeName};
+            //check if attribute in array
+            preg_match_all('/\[(.*?)\]/', $this->attribute, $arrayElements);
+            if(isset($arrayElements[1][0])) {
+              foreach($arrayElements[1] as $item){
+                if(isset($ImageManager_id[$item])){
+                  $ImageManager_id = $ImageManager_id[$item];
+                } else {
+                  $ImageManager_id = '';
+                  break;
+                }
+              }
+            }
+            //get filename from selected file
             $ImageManager_fileName = null;
             $mImageManager = ImageManager::findOne($ImageManager_id);
             if ($mImageManager !== null) {
